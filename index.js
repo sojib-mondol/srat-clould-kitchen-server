@@ -68,7 +68,7 @@ async function run(){
             const result = await orderCollection.deleteOne(query);
             res.send(result);
         })
-        
+
     }
     finally{
         
