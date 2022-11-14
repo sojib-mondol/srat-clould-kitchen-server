@@ -9,6 +9,7 @@ require('dotenv').config();
 app.use(cors());
 app.use(express.json())
 
+//vercel --prod fro update
 
 // mongo bd
 // console.log(process.env.DB_USER);
@@ -25,6 +26,8 @@ async function run(){
         const serviceCollection = client.db('starCloudKitchen').collection('services');
         // database 2
         const orderCollection = client.db('starCloudKitchen').collection('orders');
+        // database 2
+        const reviewCollection = client.db('starCloudKitchen').collection('reviews');
 
         // for three data in home page
         app.get('/main-dishes3', async(req, res) => {
@@ -66,6 +69,12 @@ async function run(){
         app.post('/orders', async(req, res) => {
             const order = req.body;
             const result = await orderCollection.insertOne(order);
+            res.send(result);
+        })
+
+        app.post('/addreview', async(req, res) => {
+            const review = req.body;
+            const result = await reviewCollection.insertOne(review);
             res.send(result);
         })
 
