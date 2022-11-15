@@ -26,7 +26,7 @@ async function run(){
         const serviceCollection = client.db('starCloudKitchen').collection('services');
         // database 2
         const orderCollection = client.db('starCloudKitchen').collection('orders');
-        // database 2
+        // database 3
         const reviewCollection = client.db('starCloudKitchen').collection('reviews');
 
         // for three data in home page
@@ -38,6 +38,7 @@ async function run(){
             res.send(services);
         })
 
+        // all services
         app.get('/main-dishes', async(req, res) => {
             const query = {}
             const cursor = serviceCollection.find(query);
@@ -72,10 +73,24 @@ async function run(){
             res.send(result);
         })
 
+        app.post('/addservice', async(req, res) => {
+            const service = req.body;
+            const result = await serviceCollection.insertOne(service);
+            res.send(result);
+        })
+
+        // for the post 
         app.post('/addreview', async(req, res) => {
             const review = req.body;
             const result = await reviewCollection.insertOne(review);
             res.send(result);
+        })
+        // for the fetch
+        app.get('/addreview', async(req, res) => {
+            const query = {}
+            const cursor = reviewCollection.find(query);
+            const services = await cursor.toArray();
+            res.send(services);
         })
 
          // for delete
