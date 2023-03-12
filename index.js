@@ -9,11 +9,6 @@ require('dotenv').config();
 app.use(cors());
 app.use(express.json())
 
-//vercel --prod fro update
-
-// mongo bd
-// console.log(process.env.DB_USER);
-// console.log(process.env.DB_PASSWORD);
 
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.zmcxwrx.mongodb.net/?retryWrites=true&w=majority`;
 console.log(uri);
@@ -22,11 +17,11 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
 async function run(){
     try{
 
-        //database 1
+        // collection 1
         const serviceCollection = client.db('starCloudKitchen').collection('services');
-        // database 2
+        // collection 2
         const orderCollection = client.db('starCloudKitchen').collection('orders');
-        // database 3
+        // collection 3
         const reviewCollection = client.db('starCloudKitchen').collection('reviews');
 
         // for three data in home page
@@ -38,7 +33,7 @@ async function run(){
             res.send(services);
         })
 
-        // all services
+        // get api all services
         app.get('/main-dishes', async(req, res) => {
             const query = {}
             const cursor = serviceCollection.find(query);
@@ -46,6 +41,7 @@ async function run(){
             res.send(services);
         })
 
+        // get api for main dishes using ID
         app.get('/main-dishes/:id', async(req, res) => {
             const id = req.params.id;
             const query = {_id: ObjectId(id)}
@@ -53,7 +49,7 @@ async function run(){
             res.send(service);
         })
 
-        // orders api
+        // get api for orders 
         app.get('/orders', async(req, res) => {
 
             let query = {};
@@ -67,25 +63,28 @@ async function run(){
             res.send(orders);
         });
 
+        // post api for orders 
         app.post('/orders', async(req, res) => {
             const order = req.body;
             const result = await orderCollection.insertOne(order);
             res.send(result);
         })
 
+        // post API for adddervices 
         app.post('/addservice', async(req, res) => {
             const service = req.body;
             const result = await serviceCollection.insertOne(service);
             res.send(result);
         })
 
-        // for the post 
+        // Post API for  addreview
         app.post('/addreview', async(req, res) => {
             const review = req.body;
             const result = await reviewCollection.insertOne(review);
             res.send(result);
         })
-        // for the fetch
+
+        // get API for addreview
         app.get('/addreview', async(req, res) => {
             const query = {}
             const cursor = reviewCollection.find(query);
@@ -93,7 +92,7 @@ async function run(){
             res.send(services);
         })
 
-         // for delete
+         // API for Delete orders 
         app.delete('/orders/:id', async(req, res) => {
             const id = req.params.id;
             const query = {_id: ObjectId(id)};
